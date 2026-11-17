@@ -1,0 +1,511 @@
+/* Reseteo general y variables: Elimina márgenes/paddings por defecto y define el modelo de caja */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Variables globales de colores para mantener consistencia visual en todo el sitio */
+:root {
+    --bg-main: #1f1424;
+    --bg-header: #130a17;
+    --bg-footer: #42284b;
+    --accent-pink: #d9788f;
+    --text-color: #ffffff;
+    --text-muted: #e2d1e8;
+}
+
+/* Estilos generales del cuerpo de la página */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden; /* Oculta cualquier desbordamiento horizontal accidental */
+}
+
+/* Header: Estilos de la barra de navegación superior */
+.header {
+    background-color: var(--bg-header);
+    padding: 1.2rem 3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Contenedor interno del menú para alinear los elementos con un ancho máximo */
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilos del logotipo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Color del ícono del logo */
+.logo i {
+    color: #fff;
+}
+
+/* Contenedor de los enlaces del menú */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+/* Estilo base para los enlaces del menú */
+.nav-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+}
+
+/* Efecto al pasar el cursor sobre los enlaces del menú */
+.nav-links a:hover {
+    opacity: 0.7;
+}
+
+/* Estilo especial para el botón de contacto en el menú */
+.btn-contacto {
+    background-color: #ffffff;
+    color: #1a1a1a !important;
+    padding: 0.6rem 1.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+/* Efecto hover para el botón de contacto */
+.btn-contacto:hover {
+    transform: scale(1.03);
+    background-color: #f0f0f0;
+}
+
+/* Hero Section: Configuración del diseño en cuadrícula para la sección principal */
+.hero {
+    max-width: 1400px;
+    margin: 3.5rem auto;
+    padding: 0 3rem;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+}
+
+/* Contenedor de la sección de texto e imagen de perfil */
+.hero-content {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* Estilos de la tarjeta/imagen de perfil */
+.profile-card img {
+    width: 200px;
+    height: 200px;
+    border-radius: 16px;
+    object-fit: cover;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+}
+
+/* Estilos del título principal dentro del hero */
+.hero-text h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+}
+
+/* Estilos del subtítulo o profesión */
+.hero-text h2 {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+/* Estilos del párrafo descriptivo */
+.hero-text p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Banner visual decorativo principal */
+.hero-banner {
+    width: 100%;
+    height: 350px;
+    background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000') center/cover;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    margin-bottom: 3rem; /* Espacio debajo del banner */
+}
+
+/* Capa de degradado sobre el banner para oscurecerlo sutilmente */
+.banner-gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(120,50,140,0.4), rgba(30,12,45,0.85));
+}
+
+/* NUEVO: Contenedor interno del texto dentro del banner de categoría */
+.banner-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+}
+
+/* NUEVO: Estilo del título gigante dentro del banner */
+.banner-content h2 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Skills Ribbon: Contenedor principal de la cinta de habilidades */
+.skills-ribbon {
+    width: 100%;
+    background-color: #130a17;
+    padding: 1.2rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    margin: 2.5rem 0;
+}
+
+/* Pista de desplazamiento que duplica el ancho para permitir el bucle continuo */
+.ribbon-track {
+    display: flex;
+    width: 200%;
+    /* will-change y translate3d fuerzan al navegador a procesarlo por GPU, eliminando tirones */
+    will-change: transform;
+    animation: scrollRibbon 22s linear infinite;
+}
+
+/* Cada uno de los dos conjuntos de texto que componen la cinta */
+.ribbon-set {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 50%;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Estilo individual para cada habilidad o texto */
+.skill-item {
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+/* Estilo para los puntos separadores entre habilidades */
+.ribbon-set .dot {
+    color: var(--accent-pink);
+    margin: 0 1.5rem;
+    flex-shrink: 0;
+}
+
+/* Animación fluida mediante la tarjeta gráfica (GPU) utilizando translate3d */
+@keyframes scrollRibbon {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+/* Ajustes responsivos para celulares o pantallas menores a 768px */
+@media (max-width: 768px) {
+    .skill-item {
+        font-size: 0.75rem; /* Reduce el tamaño de fuente para pantallas angostas */
+        letter-spacing: 0.5px;
+    }
+
+    .ribbon-set .dot {
+        margin: 0 0.8rem; /* Reduce el margen de los puntos en móvil */
+    }
+
+    .ribbon-track {
+        animation-duration: 16s; /* Ajusta la velocidad de desplazamiento en dispositivos móviles */
+    }
+}
+
+/* Works Section: Contenedor principal de la sección de trabajos */
+.works-section {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 0 3rem;
+}
+
+/* Contenedor del título secundario de sección */
+.section-title-container {
+    background-color: rgba(255, 255, 255, 0.04);
+    text-align: center;
+    padding: 1.1rem;
+    margin-bottom: 3rem;
+    border-radius: 6px;
+}
+
+/* Estilo del texto del título de sección */
+.section-title-container h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Cuadrícula de tarjetas de proyectos: Modificada a 3 columnas para albergar las 6 tarjetas de la referencia */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+/* Estilo base de cada tarjeta de trabajo */
+.work-card {
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+/* Efecto de elevación al pasar el mouse por encima de la tarjeta */
+.work-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Variante de degradado rosado para tarjetas alternas */
+.gradient-pink {
+    background: linear-gradient(135deg, #c7617b, #4a2135);
+}
+
+/* Variante de degradado morado para tarjetas alternas */
+.gradient-purple {
+    background: linear-gradient(135deg, #4f2d59, #1b0f22);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Títulos dentro de las tarjetas de trabajo */
+.card-content h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+}
+
+/* Párrafos descriptivos dentro de las tarjetas */
+.card-content p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Contenedor del botón de acción (flecha) en las tarjetas */
+.card-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Botón circular con la flecha */
+.arrow-btn {
+    width: 44px;
+    height: 44px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Efecto en la flecha cuando se pasa el cursor sobre la tarjeta */
+.work-card:hover .arrow-btn {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    transform: translateX(5px);
+}
+
+/* Footer: Estilos generales del pie de página */
+.footer {
+    background-color: var(--bg-footer);
+    padding: 3rem;
+    margin-top: 5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Contenedor interior del footer */
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+/* Texto de derechos reservados */
+.footer-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+/* Enlaces legales organizados en línea */
+.footer-links {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+
+/* Estilo de los enlaces legales */
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+/* Subrayado al pasar el cursor por los enlaces legales */
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Contenedor de los íconos de redes sociales */
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Estilo circular de los botones de redes sociales */
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Efecto hover en los botones de redes sociales */
+.social-icons a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+}
+
+/* Responsive Design: Adaptaciones generales para pantallas medianas / tablets (hasta 1024px) */
+@media (max-width: 1024px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr); /* Pasa de 3 a 2 columnas en tablets */
+    }
+}
+
+/* Responsive Design: Adaptaciones generales para pantallas medianas (hasta 992px) */
+@media (max-width: 992px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
+    }
+    
+    .hero-banner {
+        height: 250px;
+    }
+
+    .banner-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .works-section, .footer, .header {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Responsive Design: Adaptaciones para celulares pequeños (hasta 600px) */
+@media (max-width: 600px) {
+    .hero-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr; /* Pasa a 1 sola columna en celulares para evitar desbordamientos */
+    }
+
+    .banner-content h2 {
+        font-size: 2rem;
+    }
+}
+/* Ajuste para las dos grillas de proyectos */
+.cards-grid.main-categories {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas para las tarjetas principales arriba */
+    margin-bottom: 4rem; /* Separación antes del banner */
+}
+
+.category-banner {
+    margin-bottom: 3rem;
+}
+
+.cards-grid.sub-categories {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas para las 6 tarjetas de la referencia abajo */
+}
+
+/* Adaptación responsive para tablets y móviles */
+@media (max-width: 1024px) {
+    .cards-grid.sub-categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .cards-grid.main-categories,
+    .cards-grid.sub-categories {
+        grid-template-columns: 1fr;
+    }
+}

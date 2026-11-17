@@ -1,0 +1,601 @@
+
+<!-- Define que el documento es un archivo HTML5 y utiliza el idioma español -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Configura la codificación de caracteres en UTF-8 para permitir tildes y eñes correctamente -->
+    <meta charset="UTF-8">
+    <!-- Configura la ventana gráfica (viewport) para garantizar que sea responsiva en celulares y tablets -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título que se muestra en la pestaña del navegador -->
+    <title>Diseño Gráfico - Milagros Bardiero</title>
+    <!-- Enlaza la hoja de estilos global externa CSS compartida con el resto del sitio -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Importa la familia tipográfica 'Plus Jakarta Sans' con varios grosores -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome: Importa la biblioteca de iconos vectoriales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bloque de estilos CSS internos específicos para los menús desplegables y el visor de diapositivas -->
+    <style>
+        /* Contenedor general que organiza verticalmente los acordeones de proyectos */
+        .accordion-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* Estilo base de cada tarjeta o elemento desplegable individual */
+        .accordion-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Cabecera interactiva del acordeón que al hacer clic se despliega */
+        .accordion-header {
+            padding: 1.8rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: linear-gradient(135deg, rgba(199, 97, 123, 0.15), rgba(74, 33, 53, 0.3));
+        }
+
+        /* Estilo del título principal dentro de la cabecera del acordeón */
+        .accordion-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        /* Estilo del subtítulo descriptivo del acordeón */
+        .accordion-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0.3rem 0 0 0;
+        }
+
+        /* Icono de la flecha indicadora de apertura */
+        .accordion-icon {
+            font-size: 1.2rem;
+            color: var(--accent-pink);
+            transition: transform 0.3s ease;
+        }
+
+        /* Rota la flecha 180 grados cuando el acordeón se encuentra activo/abierto */
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Contenido oculto por defecto dentro del acordeón */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding: 0 2.5rem;
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        /* Expande la altura máxima del contenido cuando el acordeón está activo */
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+            padding: 2.5rem;
+            transition: max-height 0.6s ease-in;
+        }
+
+        /* Contenedor para alinear los botones de acción internos */
+        .upload-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Estilo estético para el botón de subida de archivos locales */
+        .btn-upload {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            transition: background-color 0.2s, transform 0.2s;
+            text-decoration: none;
+        }
+
+        /* Efecto al pasar el cursor sobre el botón de subida */
+        .btn-upload:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Oculta el selector de archivos nativo del navegador para personalizar el botón */
+        .hidden-file-input {
+            display: none;
+        }
+
+        /* Contenedor principal del visor de diapositivas (slideshow) */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            background-color: #120a17;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Estilo base de cada imagen/diapositiva dentro del visor */
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 1rem;
+        }
+
+        /* Muestra únicamente la diapositiva que posee la clase activa */
+        .slide.active {
+            display: block;
+        }
+
+        /* Texto guía que aparece cuando no hay imágenes cargadas */
+        .slide-placeholder {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.95rem;
+            padding: 2rem;
+        }
+
+        /* Botón flotante para eliminar la diapositiva actual visualizada */
+        .btn-remove-slide {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(217, 120, 143, 0.85);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        /* Efecto hover del botón de eliminar diapositiva */
+        .btn-remove-slide:hover {
+            background-color: #d9788f;
+            transform: scale(1.1);
+        }
+
+        /* Botones laterales de navegación (anterior / siguiente) del carrusel */
+        .slide-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: background-color 0.2s;
+            z-index: 5;
+        }
+
+        /* Efecto hover en los botones de navegación */
+        .slide-nav:hover {
+            background-color: rgba(217, 120, 143, 0.8);
+        }
+
+        /* Posicionamiento específico para el botón izquierdo (anterior) */
+        .slide-prev { left: 15px; }
+        /* Posicionamiento específico para el botón derecho (siguiente) */
+        .slide-next { right: 15px; }
+
+        /* Contador numérico de diapositivas (ej. 1 / 3) ubicado en la esquina inferior */
+        .slide-counter {
+            position: absolute;
+            bottom: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabecera de la página web -->
+    <header class="header">
+        <div class="nav-container">
+            <!-- Logotipo con icono de estrella que permite regresar a la página principal (index.html) -->
+            <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+                <i class="fa-solid fa-star"></i>
+                <span>Design</span>
+            </a>
+            <!-- Enlaces de navegación rápida del menú superior -->
+            <nav class="nav-links">
+                <a href="index.html#portfolio" class="active">Portfolio</a>
+                <a href="contacto.html" class="btn-contacto">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido principal de la subpágina -->
+    <main class="works-section" style="max-width: 1400px; margin: 3rem auto; padding: 0 3rem;">
+        
+        <!-- Banner visual decorativo superior con título de la categoría -->
+        <div class="hero-banner category-banner">
+            <div class="banner-gradient-overlay"></div>
+            <div class="banner-content">
+                <h2>DISEÑO<br>GRÁFICO</h2>
+            </div>
+        </div>
+
+        <!-- Contenedor que agrupa todos los menús desplegables -->
+        <div class="accordion-container">
+            
+            <!-- ACORDIÓN 1: Identidad Visual -->
+            <div class="accordion-item" id="acc-identidad">
+                <!-- Cabecera que ejecuta la función JavaScript toggleAccordion al hacer clic -->
+                <div class="accordion-header" onclick="toggleAccordion('acc-identidad')">
+                    <div>
+                        <h3>Identidad Visual</h3>
+                        <p>Marcas con propósito</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                </div>
+                <!-- Contenido desplegable del acordeón 1 -->
+                <div class="accordion-content">
+                    <div class="upload-actions">
+                        <p>Proyectos de identidad visual</p>
+                    </div>
+                    <!-- Visor de diapositivas asociado al acordeón 1 -->
+                    <div class="slideshow-container" id="slides-identidad">
+                        <button class="btn-remove-slide" title="Quitar diapositiva actual" onclick="removeCurrentSlide('slides-identidad')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="slide-nav slide-prev" onclick="changeSlide('slides-identidad', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slide-nav slide-next" onclick="changeSlide('slides-identidad', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <!-- IMÁGENES: Agregá una línea por cada imagen que quieras mostrar -->
+                        <img src="img/manual de marca/1.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/2.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/3.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/4.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/5.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/6.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/7.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/8.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/9.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/10.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/11.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/12.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/13.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/14.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/15.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/16.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/17.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/18.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/19.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/20.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <img src="img/manual de marca/21.jpg" class="slide" alt="Proyecto de identidad visual">
+                        <div class="slide-placeholder">Todavía no hay imágenes cargadas.</div>
+                        <div class="slide-counter">1 / 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACORDIÓN 2: Editorial -->
+            <div class="accordion-item" id="acc-editorial">
+                <div class="accordion-header" onclick="toggleAccordion('acc-editorial')">
+                    <div>
+                        <h3>Editorial</h3>
+                        <p>Diseño de publicaciones</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="upload-actions">
+                        <p>Proyectos editoriales</p>
+                    </div>
+                    <div class="slideshow-container" id="slides-editorial">
+                        <button class="btn-remove-slide" title="Quitar diapositiva actual" onclick="removeCurrentSlide('slides-editorial')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="slide-nav slide-prev" onclick="changeSlide('slides-editorial', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slide-nav slide-next" onclick="changeSlide('slides-editorial', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <!-- IMÁGENES: Agregá una línea por cada imagen que quieras mostrar -->
+                        <img src="img/editorial/imagen1.jpg" class="slide" alt="Proyecto editorial">
+                        <img src="img/editorial/imagen2.jpg" class="slide" alt="Proyecto editorial">
+                        <img src="img/editorial/imagen3.jpg" class="slide" alt="Proyecto editorial">
+
+                        <div class="slide-placeholder">Todavía no hay imágenes cargadas.</div>
+                        <div class="slide-counter">1 / 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACORDIÓN 3: Piezas Gráficas -->
+            <div class="accordion-item" id="acc-piezas">
+                <div class="accordion-header" onclick="toggleAccordion('acc-piezas')">
+                    <div>
+                        <h3>Piezas Gráficas</h3>
+                        <p>Posters, afiches y más</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="upload-actions">
+                        <p>Posters, afiches y piezas gráficas</p>
+                    </div>
+                    <div class="slideshow-container" id="slides-piezas">
+                        <button class="btn-remove-slide" title="Quitar diapositiva actual" onclick="removeCurrentSlide('slides-piezas')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="slide-nav slide-prev" onclick="changeSlide('slides-piezas', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slide-nav slide-next" onclick="changeSlide('slides-piezas', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <!-- IMÁGENES: Agregá una línea por cada imagen que quieras mostrar -->
+                        <img src="img/piezas/imagen1.jpg" class="slide" alt="Pieza gráfica">
+                        <img src="img/piezas/imagen2.jpg" class="slide" alt="Pieza gráfica">
+                        <img src="img/piezas/imagen3.jpg" class="slide" alt="Pieza gráfica">
+
+                        <div class="slide-placeholder">Todavía no hay imágenes cargadas.</div>
+                        <div class="slide-counter">1 / 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACORDIÓN 4: Redes Sociales -->
+            <div class="accordion-item" id="acc-redes">
+                <div class="accordion-header" onclick="toggleAccordion('acc-redes')">
+                    <div>
+                        <h3>Redes Sociales</h3>
+                        <p>Contenido digital y grillas</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="upload-actions">
+                        <p>Contenido para redes sociales</p>
+                    </div>
+                    <div class="slideshow-container" id="slides-redes">
+                        <button class="btn-remove-slide" title="Quitar diapositiva actual" onclick="removeCurrentSlide('slides-redes')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="slide-nav slide-prev" onclick="changeSlide('slides-redes', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slide-nav slide-next" onclick="changeSlide('slides-redes', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <!-- IMÁGENES: Agregá una línea por cada imagen que quieras mostrar -->
+                        <img src="img/redes/imagen1.jpg" class="slide" alt="Diseño para redes sociales">
+                        <img src="img/redes/imagen2.jpg" class="slide" alt="Diseño para redes sociales">
+                        <img src="img/redes/imagen3.jpg" class="slide" alt="Diseño para redes sociales">
+
+                        <div class="slide-placeholder">Todavía no hay imágenes cargadas.</div>
+                        <div class="slide-counter">1 / 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACORDIÓN 5: Packaging -->
+            <div class="accordion-item" id="acc-packaging">
+                <div class="accordion-header" onclick="toggleAccordion('acc-packaging')">
+                    <div>
+                        <h3>Packaging</h3>
+                        <p>Diseño de envases y cajas</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="upload-actions">
+                        <p>Diseños de envases y packaging</p>
+                    </div>
+                    <div class="slideshow-container" id="slides-packaging">
+                        <button class="btn-remove-slide" title="Quitar diapositiva actual" onclick="removeCurrentSlide('slides-packaging')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="slide-nav slide-prev" onclick="changeSlide('slides-packaging', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slide-nav slide-next" onclick="changeSlide('slides-packaging', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <!-- IMÁGENES: Agregá una línea por cada imagen que quieras mostrar -->
+                        <img src="img/packaging/imagen1.jpg" class="slide" alt="Proyecto de packaging">
+                        <img src="img/packaging/imagen2.jpg" class="slide" alt="Proyecto de packaging">
+                        <img src="img/packaging/imagen3.jpg" class="slide" alt="Proyecto de packaging">
+
+                        <div class="slide-placeholder">Todavía no hay imágenes cargadas.</div>
+                        <div class="slide-counter">1 / 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACORDIÓN 6: Diseño Digital -->
+            <div class="accordion-item" id="acc-digital">
+                <div class="accordion-header" onclick="toggleAccordion('acc-digital')">
+                    <div>
+                        <h3>Diseño Digital</h3>
+                        <p>Interfaces y web design</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="upload-actions">
+                        <p>Interfaces y proyectos digitales</p>
+                    </div>
+                    <div class="slideshow-container" id="slides-digital">
+                        <button class="btn-remove-slide" title="Quitar diapositiva actual" onclick="removeCurrentSlide('slides-digital')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="slide-nav slide-prev" onclick="changeSlide('slides-digital', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slide-nav slide-next" onclick="changeSlide('slides-digital', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <!-- IMÁGENES: Agregá una línea por cada imagen que quieras mostrar -->
+                        <img src="img/digital/imagen1.jpg" class="slide" alt="Proyecto de diseño digital">
+                        <img src="img/digital/imagen2.jpg" class="slide" alt="Proyecto de diseño digital">
+                        <img src="img/digital/imagen3.jpg" class="slide" alt="Proyecto de diseño digital">
+
+                        <div class="slide-placeholder">Todavía no hay imágenes cargadas.</div>
+                        <div class="slide-counter">1 / 1</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Pie de página (Footer) con información legal y enlaces reales a redes sociales -->
+    <footer id="contacto" class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <!-- Derechos de autor -->
+                <p>&copy; 2026 Milagros S.A. | Todos los derechos reservados.</p>
+                <!-- Enlaces legales secundarios -->
+                <div class="footer-links">
+                    <a href="#">Aviso Legal</a>
+                    <span>|</span>
+                    <a href="#">Política de Privacidad</a>
+                    <span>|</span>
+                    <a href="#">Términos de Servicio</a>
+                    <span>|</span>
+                    <a href="#">Configuración de Cookies</a>
+                </div>
+            </div>
+            <!-- Íconos de redes sociales con apertura en pestaña nueva (sin Pinterest) -->
+            <div class="social-icons">
+                <a href="https://youtube.com/@milagrosbardiero?si=Zk3ajjh4WptoqSGk" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+                <a href="https://wa.me/5492245423598" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+                <a href="https://www.facebook.com/share/1FmeVSAi1S/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/milibardiero?rpxt=ZW5zcXpvbG1qbGdy" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript para la interactividad de la página -->
+    <script>
+        // Control de los acordeones
+        const slideshowsData = {};
+
+        function toggleAccordion(id) {
+            const item = document.getElementById(id);
+            if (!item) return;
+
+            const isOpen = item.classList.contains('active');
+            document.querySelectorAll('.accordion-item').forEach(acc => {
+                acc.classList.remove('active');
+            });
+
+            if (!isOpen) item.classList.add('active');
+        }
+
+        // Inicializa cada carrusel usando las imágenes que ya están en el HTML.
+        function initializeSlideshows() {
+            document.querySelectorAll('.slideshow-container').forEach(container => {
+                const images = Array.from(container.querySelectorAll('img.slide'));
+                slideshowsData[container.id] = images;
+                container.dataset.currentIndex = '0';
+
+                // Actualiza el carrusel cuando cada archivo termina de cargar o falla.
+                images.forEach(img => {
+                    img.addEventListener('load', () => updateSlideshow(container.id));
+                    img.addEventListener('error', () => updateSlideshow(container.id));
+                });
+
+                updateSlideshow(container.id);
+            });
+        }
+
+        function getValidSlides(containerId) {
+            return (slideshowsData[containerId] || []).filter(img =>
+                img.complete && img.naturalWidth > 0
+            );
+        }
+
+        function updateSlideshow(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const allImages = slideshowsData[containerId] || [];
+            const validImages = getValidSlides(containerId);
+            const placeholder = container.querySelector('.slide-placeholder');
+            const prevBtn = container.querySelector('.slide-prev');
+            const nextBtn = container.querySelector('.slide-next');
+            const counter = container.querySelector('.slide-counter');
+
+            // Oculta todas las imágenes primero.
+            allImages.forEach(img => {
+                img.style.display = 'none';
+            });
+
+            // Si ninguna imagen pudo cargarse, muestra el mensaje de aviso.
+            if (validImages.length === 0) {
+                if (placeholder) placeholder.style.display = 'block';
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                if (counter) counter.style.display = 'none';
+                return;
+            }
+
+            let currentIndex = Number.parseInt(container.dataset.currentIndex || '0', 10);
+            if (!Number.isFinite(currentIndex) || currentIndex < 0 || currentIndex >= validImages.length) {
+                currentIndex = 0;
+                container.dataset.currentIndex = '0';
+            }
+
+            // Muestra directamente la imagen original correspondiente.
+            validImages[currentIndex].style.display = 'block';
+
+            if (placeholder) placeholder.style.display = 'none';
+            if (prevBtn) prevBtn.style.display = validImages.length > 1 ? 'flex' : 'none';
+            if (nextBtn) nextBtn.style.display = validImages.length > 1 ? 'flex' : 'none';
+
+            if (counter) {
+                counter.style.display = 'block';
+                counter.textContent = `${currentIndex + 1} / ${validImages.length}`;
+            }
+        }
+
+        function changeSlide(containerId, direction) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const validImages = getValidSlides(containerId);
+            if (validImages.length <= 1) return;
+
+            let currentIndex = Number.parseInt(container.dataset.currentIndex || '0', 10);
+            currentIndex = (currentIndex + direction + validImages.length) % validImages.length;
+            container.dataset.currentIndex = String(currentIndex);
+            updateSlideshow(containerId);
+        }
+
+        function removeCurrentSlide() {
+            alert('Para quitar esta imagen, eliminá su línea <img> del archivo HTML.');
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeSlideshows);
+    </script>
+</body>
+</html>
